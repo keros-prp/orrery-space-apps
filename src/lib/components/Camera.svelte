@@ -5,7 +5,7 @@
 
 <T.PerspectiveCamera
   makeDefault
-  position={[0, -1500, 0]}
+  position={[0, 0, 1500]}
   fov={50}
   far={10000}
 >
