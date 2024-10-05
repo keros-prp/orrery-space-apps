@@ -816,7 +816,7 @@
   "buffers": [
     {
       "byteLength": 273280,
-      "uri": "scene.bin"
+      "uri": "planets.bin"
     }
   ],
   "extensionsUsed": [
@@ -1254,47 +1254,47 @@
     },
     {
       "mesh": 0,
-      "name": "Sol1_lambert2_0"
+      "name": "Sun"
     },
     {
       "mesh": 1,
-      "name": "Sol1_lambert3_0"
+      "name": "Mercury"
     },
     {
       "mesh": 2,
-      "name": "Sol1_lambert4_0"
+      "name": "Venus"
     },
     {
       "mesh": 3,
-      "name": "Sol1_lambert5_0"
+      "name": "Earth"
     },
     {
       "mesh": 4,
-      "name": "Sol1_lambert6_0"
+      "name": "Mars"
     },
     {
       "mesh": 5,
-      "name": "Sol1_lambert7_0"
+      "name": "Jupiter"
     },
     {
       "mesh": 6,
-      "name": "Sol1_lambert10_0"
+      "name": "Uranus"
     },
     {
       "mesh": 7,
-      "name": "Sol1_lambert11_0"
+      "name": "Neptune"
     },
     {
       "mesh": 8,
-      "name": "Sol1_lambert12_0"
+      "name": "Pluto"
     },
     {
       "mesh": 9,
-      "name": "Sol1_lambert13_0"
+      "name": "SaturnR"
     },
     {
       "mesh": 10,
-      "name": "Sol1_lambert9_0"
+      "name": "Saturn"
     }
   ],
   "samplers": [
