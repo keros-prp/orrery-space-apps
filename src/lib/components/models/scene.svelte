@@ -5,11 +5,12 @@
   import { useGltf } from '@threlte/extras';
   import { OrbitControls } from '@threlte/extras';
   import { writable } from 'svelte/store';
-
+  import { interactivity } from '@threlte/extras'
   type $$Props = Props<THREE.Group>;
   type $$Events = Events<THREE.Group>;
   type $$Slots = Slots<THREE.Group> & { fallback: {}; error: { error: any } };
 
+  interactivity()
   export const ref = new Group();
 
   type GLTFResult = {
@@ -49,6 +50,7 @@
 
   // Función para manejar el clic en un planeta
   function handlePlanetClick(planet) {
+    console.log(planet);
     selectedPlanet.set(planet);
   }
 
@@ -76,7 +78,7 @@
     <T.Mesh
       geometry={gltf.nodes.Sol1_lambert2_0.geometry}
       material={gltf.materials.lambert2}
-      onClick={() => handlePlanetClick('Sol')} 
+      on:click={() => handlePlanetClick('Sol')}
     />
     <T.Mesh
       geometry={gltf.nodes.Sol1_lambert3_0.geometry}
