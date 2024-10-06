@@ -16,6 +16,7 @@ Title: Solar System
   import { useLoader } from '@threlte/core'
   import type { AsyncWritable } from '@threlte/core';    
   import { Texture } from 'three';
+  import { globalSunPos } from '../../stores'
 
   const textureSun = useLoader(TextureLoader).load('/models/textures/lambert2_baseColor.jpeg')
   const textureMercury = useLoader(TextureLoader).load('/models/textures/lambert3_baseColor.jpeg')
@@ -78,11 +79,12 @@ Title: Solar System
 
   const sunPosArr: number[] = planetas[planetas.length -2].getSunPos();
   const sunPos: Vector3 = new Vector3(sunPosArr[0], sunPosArr[1], sunPosArr[2]);
+  globalSunPos.update(()=>sunPos);
 
 
 </script>
 
-<T.DirectionalLight position={[0, 10, 10]} />
+<T.PointLight position={[sunPos.x, sunPos.y, sunPos.z]} color="white" intensity={1} decay={0} />
 
 {#each planetPoints as points}
 <T.Mesh>
@@ -106,7 +108,6 @@ Title: Solar System
 {#each planetPositions as planeta}
 
   <T.Mesh position.x={planeta.pos.x} position.y={planeta.pos.y} position.z={planeta.pos.z}>
-    <FakeGlowMaterial glowColor="red"/>
     <T.SphereGeometry args={[0.5, 16, 16]} />
     {#await planeta.texture then texture}
     <T.MeshStandardMaterial map={texture} />  
