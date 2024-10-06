@@ -1,3 +1,5 @@
+import type { AsyncWritable } from '@threlte/core';    
+import { Texture } from 'three';    
 export class CuerpoCeleste {
     name: string = '';
 
@@ -30,13 +32,14 @@ export class CuerpoCeleste {
     relPeriod: number = 1;
     public position: number[] = [];
     trajectory: number[][] = [];
+    texture: AsyncWritable<Texture>
 
-    constructor(name: string, a0: number, ap: number, e0: number, ep: number, I0: number, Ip: number, L0: number, Lp: number, peri0: number, perip:number, an0: number, anp: number, relPeriod: number) {
+    constructor(name: string, a0: number, ap: number, e0: number, ep: number, I0: number, Ip: number, L0: number, Lp: number, peri0: number, perip:number, an0: number, anp: number, relPeriod: number, texture: AsyncWritable<Texture>) {
         this.a0 = a0;
         this.ap = ap;
         this.e0 = e0;
         this.ep = ep;
-
+        this.texture = texture
         this.I0 = Math.PI * I0 / 180;
         this.Ip = Math.PI * Ip / 180;
         this.L0 = Math.PI * L0 / 180;
