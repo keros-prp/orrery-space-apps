@@ -69,7 +69,7 @@ export class CuerpoCeleste {
     }
 
     propagateOnClock(clock: number) {
-        const period = 64;
+        const period = 128;
         const n = 2*Math.PI/period;
         const tau = 0;
 
@@ -81,15 +81,25 @@ export class CuerpoCeleste {
     propagateOnTime(clock: number) {
         const n = 2*Math.PI/this.relPeriod;
         const M = n * (clock / 10);
-        this.position = this.propagate(M).map((v: number) => v * 100);
+        this.position = this.propagate(M).map((v: number) => v * 10);
         return this.position;
     }
+
     propagate(M: number) {
         const E = KeplerSolve(this.e,M);
 
         const x = this.a * (cos(E) - this.e);
         const y = this.a * Math.sqrt(1 - this.e**2) * sin(E);
 
+        return this.make3DPos(x, y);
+    }
+
+    getSunPos() {
+        const x = 1;
+        return [];
+    }
+
+    make3DPos(x: number, y: number): number[] {
         const cos_w = cos(this.omega);
         const sin_w = sin(this.omega);
 
@@ -110,9 +120,9 @@ export class CuerpoCeleste {
 
     public calcTrajectory(): number[][] {
         this.trajectory = [];
-        for (let clock = 1; clock <= 65; clock++) {
+        for (let clock = 1; clock <= 129; clock++) {
             const loc = this.propagateOnClock(clock);
-            this.trajectory.push(loc.map((v: number) => v * 100));
+            this.trajectory.push(loc.map((v: number) => v * 10));
         }
         return this.trajectory;
 
@@ -174,7 +184,7 @@ function KeplerSolve(e: number, M: number): number {
         count++;
 
         if (count == 8) {
-            console.error("Ya valió madres");
+            console.error("Could not converge kepler-equation solver...");
             break
         }
     }

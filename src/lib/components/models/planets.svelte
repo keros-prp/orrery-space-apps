@@ -47,8 +47,9 @@ Title: Solar System
       -0.00004397, 0.77263783, -0.00242939, 313.23810451, 428.48202785, 170.95427630,
       0.40805281, 74.01692503, 0.04240589, 84.01);
   const neptuno = new CuerpoCeleste("Neptuno", 30.06952752, 0.00006447, 0.00895439, 0.00000818, 1.77005520, 0.00022400, 304.22289287, 218.46515314, 46.68158724, 0.01009938, 131.78635853, -0.00606302, 164.8);
+  const pluton = new CuerpoCeleste("Plutón", 39.76117, 0, 2.502879951216484e-01, 0, 1.732559807118311e+01, 0, 0, 0, 1.151409620637363E+02, 0, 1.104336423551854E+02, 0, 248.1);
 
-  let planetas: CuerpoCeleste[] = [mercurio, venus, tierra, marte, jupiter, saturno, urano, neptuno]
+  let planetas: CuerpoCeleste[] = [mercurio, venus, tierra, marte, jupiter, saturno, urano, neptuno, pluton]
 
   const planetPoints: Vector3[][] = []
   for (const planeta of planetas) {
@@ -93,7 +94,7 @@ Title: Solar System
 <T.Mesh>
   <MeshLineGeometry {points} />
   <MeshLineMaterial
-    width={4}
+    width={1}
     color="#aaaaaa"
     transition={fade}
   />
@@ -101,7 +102,7 @@ Title: Solar System
 {/each}
 {#each planetPositions as planeta}
 <T.Mesh position.x={planeta.pos.x} position.y={planeta.pos.y} position.z={planeta.pos.z} >
-  <T.SphereGeometry args={[16, 16, 16]} />
+  <T.SphereGeometry args={[2, 16, 16]} />
   <T.MeshBasicMaterial color="hotpink" />
 </T.Mesh>
 {/each}
