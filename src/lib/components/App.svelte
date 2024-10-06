@@ -3,6 +3,7 @@
   import Scene from './Scene.svelte'
   import { Pane, Slider } from 'svelte-tweakpane-ui';
   import { simSpeed } from '../stores'
+  import Modal from './modal.svelte'
 
   let simSpeedVal:number = 0;
 
@@ -23,6 +24,8 @@
   />
 </Pane>
 
+
+<Modal />
 <Canvas>
   <Scene />
 </Canvas>
