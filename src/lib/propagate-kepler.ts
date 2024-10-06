@@ -31,6 +31,8 @@ export class CuerpoCeleste {
     public position: number[] = [];
     trajectory: number[][] = [];
 
+    static sunPos: number[] = [];
+
     constructor(name: string, a0: number, ap: number, e0: number, ep: number, I0: number, Ip: number, L0: number, Lp: number, peri0: number, perip:number, an0: number, anp: number, relPeriod: number) {
         this.a0 = a0;
         this.ap = ap;
@@ -94,9 +96,10 @@ export class CuerpoCeleste {
         return this.make3DPos(x, y);
     }
 
-    getSunPos() {
-        const x = 1;
-        return [];
+    getSunPos(): number[] {
+        const x = this.a * this.e;
+        CuerpoCeleste.sunPos =  this.make3DPos(x, 0);
+        return CuerpoCeleste.sunPos;
     }
 
     make3DPos(x: number, y: number): number[] {

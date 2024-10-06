@@ -8,24 +8,10 @@ Title: Solar System
 -->
 
 <script lang="ts">
-  import { Mesh } from 'three'
   import { T, useTask } from '@threlte/core'
-  import { createTransition } from '@threlte/extras'
-  import { OrbitControls, MeshLineGeometry, MeshLineMaterial } from '@threlte/extras'
+  import { OrbitControls, MeshLineGeometry, MeshLineMaterial, FakeGlowMaterial } from '@threlte/extras'
   import {CuerpoCeleste} from '../../propagate-kepler'
   import { Vector3 } from 'three'
-  import { cubicOut } from 'svelte/easing';
-
-  const fade = createTransition<Mesh>((ref: any) => {
-    if (!ref.transparent) ref.transparent = true
-    return {
-      tick(t: any) {
-        ref.opacity = t
-      },
-      easing: cubicOut,
-      duration: 10000
-    }
-  })
 
   const mercurio = new CuerpoCeleste("Mercurio", 0.38709927, 0.00000037,
       0.20563593, 0.00001906, 7.00497902, -0.00594749, 252.25032350,
@@ -72,6 +58,9 @@ Title: Solar System
     cont += delta;
   })
 
+  const sunPosArr: number[] = planetas[planetas.length -2].getSunPos();
+  const sunPos: Vector3 = new Vector3(sunPosArr[0], sunPosArr[1], sunPosArr[2]);
+
 
 </script>
 
@@ -94,15 +83,22 @@ Title: Solar System
 <T.Mesh>
   <MeshLineGeometry {points} />
   <MeshLineMaterial
-    width={1}
+    width={0.125}
     color="#aaaaaa"
-    transition={fade}
   />
 </T.Mesh>
 {/each}
+<T.Mesh position.x={sunPos.x} position.y={sunPos.y} position.z={sunPos.z} >
+  <T.SphereGeometry args={[1, 32, 32]} />
+  <T.MeshBasicMaterial color="yellow" />
+</T.Mesh>
 {#each planetPositions as planeta}
 <T.Mesh position.x={planeta.pos.x} position.y={planeta.pos.y} position.z={planeta.pos.z} >
-  <T.SphereGeometry args={[2, 16, 16]} />
+  <T.SphereGeometry args={[0.5, 16, 16]} />
   <T.MeshBasicMaterial color="hotpink" />
 </T.Mesh>
 {/each}
+<T.Mesh position={[sunPos.x, sunPos.y, sunPos.z]}>
+	<FakeGlowMaterial glowColor="yellow"/>
+    <T.IcosahedronGeometry args={[2, 4]} />
+</T.Mesh>
