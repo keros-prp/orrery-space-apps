@@ -15,7 +15,16 @@ Title: Solar System
   import {CuerpoCeleste} from '../../propagate-kepler'
   import { Vector3 } from 'three'
   import { cubicOut } from 'svelte/easing';
-
+  import { huevo } from '../store';
+  import { vision } from '../store';
+  import { tamaño } from '../store';
+  import { satelites } from '../store';
+  import { distancia } from '../store';
+  import { duracion } from '../store';
+  import { tiempo } from '../store';
+  import { name } from '../store';
+  import { interactivity } from '@threlte/extras'
+  interactivity()
   const fade = createTransition<Mesh>((ref: any) => {
     if (!ref.transparent) ref.transparent = true
     return {
@@ -27,27 +36,113 @@ Title: Solar System
     }
   })
 
-  const mercurio = new CuerpoCeleste("Mercurio", 0.38709927, 0.00000037,
+  const datos = (planeta) => {
+    if(planeta.planet == "Mercury"){
+      distancia.set('57.9 million km')
+      tiempo.set('0.24 years')
+      tamaño.set('4,880 km')
+      duracion.set('58.6 hours')
+      satelites.set(0)
+      name.set('Named after the Roman messenger god, Mercury, who was associated with speed and communication.')
+    }
+    if(planeta.planet == "Venus"){
+      distancia.set('108.2 million km')
+      tiempo.set('0.615 years')
+      tamaño.set('12,104 km')
+      duracion.set('243 hours')
+      satelites.set(0)
+      name.set('Named after the Roman goddess of love and beauty, Venus.')
+    }
+    if(planeta.planet == "Earth"){
+      distancia.set('149.6 million km')
+      tiempo.set('1 year')
+      tamaño.set('12,742 km')
+      duracion.set('24 hours')
+      satelites.set(1)
+      name.set('The name "Earth" comes from Old English "eorðe" and the Anglo-Saxon word "erda," meaning ground or soil. The name reflects the planet\'s nature as the ground we stand on.')
+    }
+    if(planeta.planet == "Mars"){
+      distancia.set('227.9 million km')
+      tiempo.set('1.88 years')
+      tamaño.set('6,779 km')
+      duracion.set('24.6 hours')
+      satelites.set(2)
+      name.set('Named after the Roman god of war, Mars. The planet\'s reddish color led to its association with blood and warfare')
+    }
+    if(planeta.planet == "Jupiter"){
+      distancia.set('778.5 million km')
+      tiempo.set('11.86 years')
+      tamaño.set('139,822 km')
+      duracion.set('9.9 hours')
+      satelites.set(95)
+      name.set('Named after the king of the Roman gods, Jupiter, who was associated with thunder and the sky.')
+    }
+    if(planeta.planet == "Saturn"){
+      distancia.set('1,434.0 million km')
+      tiempo.set('29.46 years')
+      tamaño.set('116,464 km')
+      duracion.set('10.7 hours')
+      satelites.set(146)
+      name.set('Named after the Roman god of time, Saturn, who was also associated with wealth and abundance.')
+    }
+    if(planeta.planet == "Uranus"){
+      distancia.set('2,871.0 million km')
+      tiempo.set('84.01 years')
+      tamaño.set('50,724 km')
+      duracion.set('17.2 hours')
+      satelites.set(28)
+      name.set('Named after the Greek god Uranus, the personification of the sky. The name was suggested by astronomer Johann Bode.')
+    }
+    if(planeta.planet == "Neptune"){
+      distancia.set('	4,495.1 million km')
+      tiempo.set('164.8 years')
+      tamaño.set('49,244 km')
+      duracion.set('16.1 hours')
+      satelites.set(16)
+      name.set('Named after the Roman messenger god, Mercury, who was associated with speed and communication.Named after the Roman god of the sea, Neptune. The name reflects the planet\'s deep blue color.')
+    }
+    if(planeta.planet == "Pluto"){
+      distancia.set('5,906.4 million km')
+      tiempo.set('248 years')
+      tamaño.set('2,377 km')
+      duracion.set('153.3 hours')
+      satelites.set(5)
+      name.set('Named after the Roman god of the underworld, Pluto. The name reflects the cold and distant nature of the dwarf planet.')
+    }
+  };
+
+
+  const handlePlanetClick = (planeta) => {
+    console.log(planeta.planet)
+    huevo.set(planeta.planet)
+    console.log(huevo)
+    vision.set(true)
+    datos(planeta)
+  };
+
+
+
+  const mercurio = new CuerpoCeleste("Mercury", 0.38709927, 0.00000037,
       0.20563593, 0.00001906, 7.00497902, -0.00594749, 252.25032350,
       149472.67411175, 77.45779628, 0.16047689, 48.33076593, -0.12534081, 0.240846);
   const venus = new CuerpoCeleste("Venus", 0.72333566, 0.00000390, 0.00677672,
       -0.00004107, 3.39467605, -0.00078890, 181.97909950, 58517.81538729,
       131.60246718, 0.00268329, 76.67984255, -0.27769418, 0.615);
-  const tierra = new CuerpoCeleste("Tierra", 1.00000261, 0.00000562, 0.01671123,
+  const tierra = new CuerpoCeleste("Earth", 1.00000261, 0.00000562, 0.01671123,
       -0.00004392, -0.00001531, -0.01294668, 100.46457166, 35999.37244981,
       102.93768193, 0.32327364, 0, 0, 1);
-  const marte = new CuerpoCeleste("Marte", 1.52371243, 0.00000097, 0.09336511, 0.00009149, 1.85181869, -0.00724757, -4.56813164, 19140.29934243, -23.91744784, 0.45223625, 49.71320984, -0.26852431, 1.881);
-  const jupiter = new CuerpoCeleste("Júpiter", 5.20288700, -0.00011607,
+  const marte = new CuerpoCeleste("Mars", 1.52371243, 0.00000097, 0.09336511, 0.00009149, 1.85181869, -0.00724757, -4.56813164, 19140.29934243, -23.91744784, 0.45223625, 49.71320984, -0.26852431, 1.881);
+  const jupiter = new CuerpoCeleste("Jupiter", 5.20288700, -0.00011607,
       0.04838624, -0.00013253, 1.30439695, -0.00183714, 34.39644051, 3034.74612775,
       14.72847983, 0.21252668, 100.47390909, 0.20469106, 11.86);
-  const saturno = new CuerpoCeleste("Saturno", 9.53667594, -0.00125060,
+  const saturno = new CuerpoCeleste("Saturn", 9.53667594, -0.00125060,
       0.05386179, -0.00050991, 2.48599187, 0.00193609, 49.95424423, 1222.49362201,
       92.59887831, -0.41897216, 113.66242448, -0.28867794, 29.46);
-  const urano = new CuerpoCeleste("Urano", 19.18916464, -0.00196176, 0.04725744,
+  const urano = new CuerpoCeleste("Uranus", 19.18916464, -0.00196176, 0.04725744,
       -0.00004397, 0.77263783, -0.00242939, 313.23810451, 428.48202785, 170.95427630,
       0.40805281, 74.01692503, 0.04240589, 84.01);
-  const neptuno = new CuerpoCeleste("Neptuno", 30.06952752, 0.00006447, 0.00895439, 0.00000818, 1.77005520, 0.00022400, 304.22289287, 218.46515314, 46.68158724, 0.01009938, 131.78635853, -0.00606302, 164.8);
-  const pluton = new CuerpoCeleste("Plutón", 39.76117, 0, 2.502879951216484e-01, 0, 1.732559807118311e+01, 0, 0, 0, 1.151409620637363E+02, 0, 1.104336423551854E+02, 0, 248.1);
+  const neptuno = new CuerpoCeleste("Neptun", 30.06952752, 0.00006447, 0.00895439, 0.00000818, 1.77005520, 0.00022400, 304.22289287, 218.46515314, 46.68158724, 0.01009938, 131.78635853, -0.00606302, 164.8);
+  const pluton = new CuerpoCeleste("Pluto", 39.76117, 0, 2.502879951216484e-01, 0, 1.732559807118311e+01, 0, 0, 0, 1.151409620637363E+02, 0, 1.104336423551854E+02, 0, 248.1);
 
   let planetas: CuerpoCeleste[] = [mercurio, venus, tierra, marte, jupiter, saturno, urano, neptuno, pluton]
 
@@ -71,7 +166,6 @@ Title: Solar System
     }
     cont += delta;
   })
-
 
 </script>
 
@@ -101,7 +195,7 @@ Title: Solar System
 </T.Mesh>
 {/each}
 {#each planetPositions as planeta}
-<T.Mesh position.x={planeta.pos.x} position.y={planeta.pos.y} position.z={planeta.pos.z} >
+<T.Mesh position.x={planeta.pos.x} position.y={planeta.pos.y} position.z={planeta.pos.z} interactive on:click={() => handlePlanetClick(planeta)}>
   <T.SphereGeometry args={[2, 16, 16]} />
   <T.MeshBasicMaterial color="hotpink" />
 </T.Mesh>
