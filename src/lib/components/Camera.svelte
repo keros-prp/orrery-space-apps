@@ -8,6 +8,8 @@
   position={[0, 0, 1000]}
   fov={50}
   far={10000}
+  
+   
 >
   <OrbitControls
     autoRotate
@@ -16,5 +18,6 @@
     enableDamping
     autoRotateSpeed={0.0}
     target.y={1.5}
+    lookAt={[0,10,0]}
   />
 </T.PerspectiveCamera>
