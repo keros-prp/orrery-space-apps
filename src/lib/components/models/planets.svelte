@@ -15,14 +15,8 @@ Title: Solar System
   import {CuerpoCeleste} from '../../propagate-kepler'
   import { Vector3 } from 'three'
   import { cubicOut } from 'svelte/easing';
-  import { huevo } from '../store';
-  import { vision } from '../store';
-  import { tamaño } from '../store';
-  import { satelites } from '../store';
-  import { distancia } from '../store';
-  import { duracion } from '../store';
-  import { tiempo } from '../store';
-  import { name } from '../store';
+  import { info } from '../store';
+  import type { Info } from '../store'
   import { interactivity } from '@threlte/extras'
   interactivity()
   const fade = createTransition<Mesh>((ref: any) => {
@@ -36,91 +30,105 @@ Title: Solar System
     }
   })
 
-  const datos = (planeta) => {
-    if(planeta.planet == "Mercury"){
-      distancia.set('57.9 million km')
-      tiempo.set('0.24 years')
-      tamaño.set('4,880 km')
-      duracion.set('58.6 hours')
-      satelites.set(0)
-      name.set('Named after the Roman messenger god, Mercury, who was associated with speed and communication.')
+  const datos: Info[] = [
+    {
+      nombre: "Mercury",  
+      vision: true,
+      distancia:"57.9 million km",
+      tiempo: '0.24 years',
+      tamaño: '4,880 km',
+      duracion: '58.6 hours',
+      satelites: 0,
+      name: 'Named after the Roman messenger god, Mercury, who was associated with speed and communication.',
+    },
+    {
+      nombre: "Venus",
+      vision: true,
+      distancia: '108.2 million km',
+      tiempo: '0.615 years',
+      tamaño: '12,104 km',
+      duracion: '243 hours',
+      satelites: 0,
+      name: 'Named after the Roman goddess of love and beauty, Venus.',
+    },
+    {
+    	nombre: "Earth",
+      vision: true,
+      distancia: '149.6 million km',
+      tiempo: '1 year',
+      tamaño: '12,742 km',
+      duracion: '24 hours',
+      satelites: 1,
+      name: 'The name "Earth" comes from Old English "eorðe" and the Anglo-Saxon word "erda," meaning ground or soil. The name reflects the planet\'s nature as the ground we stand on.',
+    },
+    {
+    	nombre: "Mars",
+      vision: true,
+      distancia: '227.9 million km',
+      tiempo: '1.88 years',
+      tamaño: '6,779 km',
+      duracion: '24.6 hours',
+      satelites: 2,
+      name: 'Named after the Roman god of war, Mars. The planet\'s reddish color led to its association with blood and warfare',
+    },
+    {
+      nombre: "Jupiter",
+      vision: true,
+      distancia: '778.5 million km',
+      tiempo: '11.86 years',
+      tamaño: '139,822 km',
+      duracion: '9.9 hours',
+      satelites: 95,
+      name: 'Named after the king of the Roman gods, Jupiter, who was associated with thunder and the sky.',
+    },
+    {
+      nombre: "Saturn",
+      vision: true,
+      distancia: '1,434.0 million km',
+      tiempo: '29.46 years',
+      tamaño: '116,464 km',
+      duracion: '10.7 hours',
+      satelites: 146,
+      name: 'Named after the Roman god of time, Saturn, who was also associated with wealth and abundance.',
+    },
+    {
+    	nombre: "Uranus",
+      vision: true,
+      distancia: '2,871.0 million km',
+      tiempo: '84.01 years',
+      tamaño: '50,724 km',
+      duracion: '17.2 hours',
+      satelites: 28,
+      name: 'Named after the Greek god Uranus, the personification of the sky. The name was suggested by astronomer Johann Bode.',
+    },
+    {
+    	nombre: "Neptune",
+      vision: true,
+      distancia: '	4,495.1 million km',
+      tiempo: '164.8 years',
+      tamaño: '49,244 km',
+      duracion: '16.1 hours',
+      satelites: 16,
+      name: 'Named after the Roman messenger god, Mercury, who was associated with speed and communication.Named after the Roman god of the sea, Neptune. The name reflects the planet\'s deep blue color.',
+    },
+    {
+    	nombre: "Pluto",
+      vision: true,
+      distancia: '5,906.4 million km',
+      tiempo: '248 years',
+      tamaño: '2,377 km',
+      duracion: '153.3 hours',
+      satelites: 5,
+      name: 'Named after the Roman god of the underworld, Pluto. The name reflects the cold and distant nature of the dwarf planet.',
     }
-    if(planeta.planet == "Venus"){
-      distancia.set('108.2 million km')
-      tiempo.set('0.615 years')
-      tamaño.set('12,104 km')
-      duracion.set('243 hours')
-      satelites.set(0)
-      name.set('Named after the Roman goddess of love and beauty, Venus.')
-    }
-    if(planeta.planet == "Earth"){
-      distancia.set('149.6 million km')
-      tiempo.set('1 year')
-      tamaño.set('12,742 km')
-      duracion.set('24 hours')
-      satelites.set(1)
-      name.set('The name "Earth" comes from Old English "eorðe" and the Anglo-Saxon word "erda," meaning ground or soil. The name reflects the planet\'s nature as the ground we stand on.')
-    }
-    if(planeta.planet == "Mars"){
-      distancia.set('227.9 million km')
-      tiempo.set('1.88 years')
-      tamaño.set('6,779 km')
-      duracion.set('24.6 hours')
-      satelites.set(2)
-      name.set('Named after the Roman god of war, Mars. The planet\'s reddish color led to its association with blood and warfare')
-    }
-    if(planeta.planet == "Jupiter"){
-      distancia.set('778.5 million km')
-      tiempo.set('11.86 years')
-      tamaño.set('139,822 km')
-      duracion.set('9.9 hours')
-      satelites.set(95)
-      name.set('Named after the king of the Roman gods, Jupiter, who was associated with thunder and the sky.')
-    }
-    if(planeta.planet == "Saturn"){
-      distancia.set('1,434.0 million km')
-      tiempo.set('29.46 years')
-      tamaño.set('116,464 km')
-      duracion.set('10.7 hours')
-      satelites.set(146)
-      name.set('Named after the Roman god of time, Saturn, who was also associated with wealth and abundance.')
-    }
-    if(planeta.planet == "Uranus"){
-      distancia.set('2,871.0 million km')
-      tiempo.set('84.01 years')
-      tamaño.set('50,724 km')
-      duracion.set('17.2 hours')
-      satelites.set(28)
-      name.set('Named after the Greek god Uranus, the personification of the sky. The name was suggested by astronomer Johann Bode.')
-    }
-    if(planeta.planet == "Neptune"){
-      distancia.set('	4,495.1 million km')
-      tiempo.set('164.8 years')
-      tamaño.set('49,244 km')
-      duracion.set('16.1 hours')
-      satelites.set(16)
-      name.set('Named after the Roman messenger god, Mercury, who was associated with speed and communication.Named after the Roman god of the sea, Neptune. The name reflects the planet\'s deep blue color.')
-    }
-    if(planeta.planet == "Pluto"){
-      distancia.set('5,906.4 million km')
-      tiempo.set('248 years')
-      tamaño.set('2,377 km')
-      duracion.set('153.3 hours')
-      satelites.set(5)
-      name.set('Named after the Roman god of the underworld, Pluto. The name reflects the cold and distant nature of the dwarf planet.')
-    }
+  ];
+
+  const handlePlanetClick = (planeta: { planet: string; pos: Vector3  }) => {
+    let datosPlaneta = datos.find(element => element.nombre === planeta.planet);
+    info.update(() => {
+        return { nombre: datosPlaneta?.nombre, vision: true, tamaño: datosPlaneta?.tamaño, distancia: datosPlaneta?.distancia, tiempo: datosPlaneta?.tiempo, duracion: datosPlaneta?.duracion, satelites: datosPlaneta?.satelites, name: datosPlaneta?.name }
+    })
   };
-
-
-  const handlePlanetClick = (planeta) => {
-    console.log(planeta.planet)
-    huevo.set(planeta.planet)
-    console.log(huevo)
-    vision.set(true)
-    datos(planeta)
-  };
-
-
 
   const mercurio = new CuerpoCeleste("Mercury", 0.38709927, 0.00000037,
       0.20563593, 0.00001906, 7.00497902, -0.00594749, 252.25032350,
