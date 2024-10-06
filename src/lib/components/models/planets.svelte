@@ -47,13 +47,16 @@ Title: Solar System
   const saturno = new CuerpoCeleste("Saturno", 9.53667594, -0.00125060,
       0.05386179, -0.00050991, 2.48599187, 0.00193609, 49.95424423, 1222.49362201,
       92.59887831, -0.41897216, 113.66242448, -0.28867794, 29.46,textureSaturn);
+  const saturnoR = new CuerpoCeleste("AnilloSaturno", 9.53667594, -0.00125060,
+      0.05386179, -0.00050991, 2.48599187, 0.00193609, 49.95424423, 1222.49362201,
+      92.59887831, -0.41897216, 113.66242448, -0.28867794, 29.46,textureSaturnR);
   const urano = new CuerpoCeleste("Urano", 19.18916464, -0.00196176, 0.04725744,
       -0.00004397, 0.77263783, -0.00242939, 313.23810451, 428.48202785, 170.95427630,
       0.40805281, 74.01692503, 0.04240589, 84.01, textureUranus);
   const neptuno = new CuerpoCeleste("Neptuno", 30.06952752, 0.00006447, 0.00895439, 0.00000818, 1.77005520, 0.00022400, 304.22289287, 218.46515314, 46.68158724, 0.01009938, 131.78635853, -0.00606302, 164.8,textureNeptune);
   const pluton = new CuerpoCeleste("Plutón", 39.76117, 0, 2.502879951216484e-01, 0, 1.732559807118311e+01, 0, 0, 0, 1.151409620637363E+02, 0, 1.104336423551854E+02, 0, 248.1,texturePluto);
 
-  let planetas: CuerpoCeleste[] = [mercurio, venus, tierra, marte, jupiter, saturno, urano, neptuno, pluton]
+  let planetas: CuerpoCeleste[] = [mercurio, venus, tierra, marte, jupiter, saturno,saturnoR, urano, neptuno, pluton]
 
   const planetPoints: Vector3[][] = []
   for (const planeta of planetas) {
@@ -122,7 +125,11 @@ Title: Solar System
 
   <T.Mesh position.x={planeta.pos.x} position.y={planeta.pos.y} position.z={planeta.pos.z}>
     <FakeGlowMaterial glowColor="red"/>
+    {#if planeta.planet != 'AnilloSaturno'}
     <T.SphereGeometry args={[0.5, 16, 16]} />
+    {:else}
+    <T.RingGeometry args={[0.65, 1.1,32]} />
+    {/if}
     {#await planeta.texture then texture}
     <T.MeshStandardMaterial map={texture} />  
     {/await}  
