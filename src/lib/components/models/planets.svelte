@@ -8,70 +8,100 @@ Title: Solar System
 -->
 
 <script lang="ts">
-  import type * as THREE from 'three'
-  import { Group } from 'three'
-  import { T, type Props, type Events, type Slots, forwardEventHandlers } from '@threlte/core'
-  import { useGltf } from '@threlte/extras'
-  import {OrbitControls} from '@threlte/extras'
+  import { Mesh } from 'three'
+  import { T, useTask } from '@threlte/core'
+  import { createTransition } from '@threlte/extras'
+  import { OrbitControls, MeshLineGeometry, MeshLineMaterial } from '@threlte/extras'
+  import {CuerpoCeleste} from '../../propagate-kepler'
+  import { Vector3 } from 'three'
+  import { cubicOut } from 'svelte/easing';
 
-  type $$Props = Props<THREE.Group>
-  type $$Events = Events<THREE.Group>
-  type $$Slots = Slots<THREE.Group> & { fallback: {}; error: { error: any } }
-
-  export const ref = new Group()
-
-  type GLTFResult = {
-    nodes: {
-      Sun: THREE.Mesh
-      Mercury: THREE.Mesh
-      Venus: THREE.Mesh
-      Earth: THREE.Mesh
-      Mars: THREE.Mesh
-      Jupiter: THREE.Mesh
-      Uranus: THREE.Mesh
-      Neptune: THREE.Mesh
-      Pluto: THREE.Mesh
-      SaturnR: THREE.Mesh
-      Saturn: THREE.Mesh
+  const fade = createTransition<Mesh>((ref: any) => {
+    if (!ref.transparent) ref.transparent = true
+    return {
+      tick(t: any) {
+        ref.opacity = t
+      },
+      easing: cubicOut,
+      duration: 10000
     }
-    materials: {
-      lambert2: THREE.MeshBasicMaterial
-      lambert3: THREE.MeshBasicMaterial
-      lambert4: THREE.MeshBasicMaterial
-      lambert5: THREE.MeshBasicMaterial
-      lambert6: THREE.MeshBasicMaterial
-      lambert7: THREE.MeshBasicMaterial
-      lambert10: THREE.MeshBasicMaterial
-      lambert11: THREE.MeshBasicMaterial
-      lambert12: THREE.MeshBasicMaterial
-      lambert13: THREE.MeshBasicMaterial
-      lambert9: THREE.MeshBasicMaterial
+  })
+
+  const mercurio = new CuerpoCeleste("Mercurio", 0.38709927, 0.00000037,
+      0.20563593, 0.00001906, 7.00497902, -0.00594749, 252.25032350,
+      149472.67411175, 77.45779628, 0.16047689, 48.33076593, -0.12534081, 0.240846);
+  const venus = new CuerpoCeleste("Venus", 0.72333566, 0.00000390, 0.00677672,
+      -0.00004107, 3.39467605, -0.00078890, 181.97909950, 58517.81538729,
+      131.60246718, 0.00268329, 76.67984255, -0.27769418, 0.615);
+  const tierra = new CuerpoCeleste("Tierra", 1.00000261, 0.00000562, 0.01671123,
+      -0.00004392, -0.00001531, -0.01294668, 100.46457166, 35999.37244981,
+      102.93768193, 0.32327364, 0, 0, 1);
+  const marte = new CuerpoCeleste("Marte", 1.52371243, 0.00000097, 0.09336511, 0.00009149, 1.85181869, -0.00724757, -4.56813164, 19140.29934243, -23.91744784, 0.45223625, 49.71320984, -0.26852431, 1.881);
+  const jupiter = new CuerpoCeleste("Júpiter", 5.20288700, -0.00011607,
+      0.04838624, -0.00013253, 1.30439695, -0.00183714, 34.39644051, 3034.74612775,
+      14.72847983, 0.21252668, 100.47390909, 0.20469106, 11.86);
+  const saturno = new CuerpoCeleste("Saturno", 9.53667594, -0.00125060,
+      0.05386179, -0.00050991, 2.48599187, 0.00193609, 49.95424423, 1222.49362201,
+      92.59887831, -0.41897216, 113.66242448, -0.28867794, 29.46);
+  const urano = new CuerpoCeleste("Urano", 19.18916464, -0.00196176, 0.04725744,
+      -0.00004397, 0.77263783, -0.00242939, 313.23810451, 428.48202785, 170.95427630,
+      0.40805281, 74.01692503, 0.04240589, 84.01);
+  const neptuno = new CuerpoCeleste("Neptuno", 30.06952752, 0.00006447, 0.00895439, 0.00000818, 1.77005520, 0.00022400, 304.22289287, 218.46515314, 46.68158724, 0.01009938, 131.78635853, -0.00606302, 164.8);
+
+  let planetas: CuerpoCeleste[] = [mercurio, venus, tierra, marte, jupiter, saturno, urano, neptuno]
+
+  const planetPoints: Vector3[][] = []
+  for (const planeta of planetas) {
+    const points = [];
+    for (const vec of planeta.calcTrajectory()) {
+      points.push(new Vector3(vec[0], vec[1], vec[2]));
     }
+    planetPoints.push(points);
   }
 
-  const gltf = useGltf<GLTFResult>('/models/planets.gltf')
+  let planetPositions: { planet: string; pos: Vector3  }[] = [];
 
-  const component = forwardEventHandlers()
+  let cont = 0;
+  const { start, stop, started, task } = useTask((delta) => {
+    planetPositions = [];
+    for (let planeta of planetas) {
+      const pos = planeta.propagateOnTime(cont);
+      planetPositions!.push({planet: planeta.name, pos: new Vector3(pos[0], pos[1], pos[2])});
+    }
+    cont += delta;
+  })
+
+
 </script>
 
-<T is={ref} dispose={false} {...$$restProps} bind:this={$component}>
-  {#await gltf}
-    <slot name="fallback" />
-  {:then gltf}
-    <T.Mesh geometry={gltf.nodes.Sun.geometry} material={gltf.materials.lambert2} />
-    <T.Mesh geometry={gltf.nodes.Mercury.geometry} material={gltf.materials.lambert3} />
-    <T.Mesh geometry={gltf.nodes.Venus.geometry} material={gltf.materials.lambert4} />
-    <T.Mesh geometry={gltf.nodes.Earth.geometry} material={gltf.materials.lambert5} />
-    <T.Mesh geometry={gltf.nodes.Mars.geometry} material={gltf.materials.lambert6} />
-    <T.Mesh geometry={gltf.nodes.Jupiter.geometry} material={gltf.materials.lambert7} />
-    <T.Mesh geometry={gltf.nodes.Uranus.geometry} material={gltf.materials.lambert10} />
-    <T.Mesh geometry={gltf.nodes.Neptune.geometry} material={gltf.materials.lambert11} />
-    <T.Mesh geometry={gltf.nodes.Pluto.geometry} material={gltf.materials.lambert12} />
-    <T.Mesh geometry={gltf.nodes.SaturnR.geometry} material={gltf.materials.lambert13} />
-    <T.Mesh geometry={gltf.nodes.Saturn.geometry} material={gltf.materials.lambert9} />
-  {:catch error}
-    <slot name="error" {error} />
-  {/await}
+<T.PerspectiveCamera
+  makeDefault
+  position={[0, -1500, 0]}
+  fov={50}
+  far={10000}
+>
+  <OrbitControls
+    autoRotate
+    enableZoom={true}
+    enableDamping
+    autoRotateSpeed={0.0}
+    target.y={1.5}
+  />
+</T.PerspectiveCamera>
 
-  <slot {ref} />
-</T>
+{#each planetPoints as points}
+<T.Mesh>
+  <MeshLineGeometry {points} />
+  <MeshLineMaterial
+    width={4}
+    color="#aaaaaa"
+    transition={fade}
+  />
+</T.Mesh>
+{/each}
+{#each planetPositions as planeta}
+<T.Mesh position.x={planeta.pos.x} position.y={planeta.pos.y} position.z={planeta.pos.z} >
+  <T.SphereGeometry args={[16, 16, 16]} />
+  <T.MeshBasicMaterial color="hotpink" />
+</T.Mesh>
+{/each}
