@@ -82,21 +82,6 @@ Title: Solar System
 
 </script>
 
-<T.PerspectiveCamera
-  makeDefault
-  position={[0, -1500, 0]}
-  fov={50}
-  far={10000}
->
-  <OrbitControls
-    autoRotate
-    enableZoom={true}
-    enableDamping
-    autoRotateSpeed={0.0}
-    target.y={1.5}
-  />
-</T.PerspectiveCamera>
-
 <T.DirectionalLight position={[0, 10, 10]} />
 
 {#each planetPoints as points}
@@ -110,7 +95,7 @@ Title: Solar System
 
 </T.Mesh>
 {/each}
-<T.Mesh position.x={sunPos.x} position.y={sunPos.y} position.z={sunPos.z} >
+<T.Mesh position={[sunPos.x, sunPos.y, sunPos.z]}>
   <T.SphereGeometry args={[1, 32, 32]} />
   <T.MeshBasicMaterial color="yellow" />
 </T.Mesh>
