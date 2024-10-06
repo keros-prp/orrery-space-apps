@@ -9,6 +9,14 @@ export class CuerpoCeleste {
     W: number = 0;
     trajectory: number[][] = [];
     constructor(name: string, a0: number, ap: number, e0: number, ep: number, I0: number, Ip: number, L0: number, Lp: number, w0: number, wp:number, W0: number, Wp: number) {
+        I0 = Math.PI * L0 / 180;
+        Ip = Math.PI * Lp / 180;
+        L0 = Math.PI * L0 / 180;
+        Lp = Math.PI * Lp / 180;
+        w0 = Math.PI * w0 / 180;
+        wp = Math.PI * wp / 180;
+        W0 = Math.PI * W0 / 180;
+        Wp = Math.PI * Wp / 180;
         this.name = name;
         this.T = (normalDateToJD(new Date()) - 2451545) / 36525;
         this.a = a0 + this.T * ap;
@@ -26,34 +34,32 @@ export class CuerpoCeleste {
 
         const M = n * (clock - tau)
         const E = KeplerSolve(this.e,M)
-        const cose = cos(E)
 
-        const x = this.a * (cose - this.e);
+        const x = this.a * (cos(E) - this.e);
         const y = this.a * Math.sqrt(1 - this.e**2) * sin(E);
 
-        const cos_w = cos(this.w);
-        const sin_w = sin(this.w);
+        // const cos_w = cos(this.w);
+        // const sin_w = sin(this.w);
+        //
+        // const cos_W = cos(this.W);
+        // const sin_W = sin(this.W);
+        //
+        // const cos_I = cos(this.I);
+        // const sin_I = sin(this.I);
 
-        const cos_W = cos(this.W);
-        const sin_W = sin(this.W);
+        // const xecl = (cos_w*cos_W - sin_w*sin_W*cos_I) * x +
+        //     (-sin_w*cos_W - sin_w*sin_W*cos_I) * y;
+        // const yecl = (cos_w*sin_W + sin_w*cos_W*cos_I) * x +
+        //     (-sin_w*sin_W + cos_w*cos_W*cos_I) * y;
+        // const zecl = (sin_w*sin_I) * x + (cos_w*sin_I) * y;
 
-        const cos_I = cos(this.I);
-        const sin_I = sin(this.I);
-
-        const xecl = (cos_w*cos_W - sin_w*sin_W*cos_I) * x +
-            (-sin_w*cos_W - sin_w*sin_W*cos_I) * y;
-        const yecl = (cos_w*sin_W + sin_w*cos_W*cos_I) * x +
-            (-sin_w*sin_W + cos_w*sin_W*cos_I) * y;
-        const zecl = (sin_w*sin_I) * x + (cos_w*sin_I) * y;
-
+        return [x, y, 0];
         // return [xecl, yecl, zecl];
-        return [x,y,0];
     }
 
     public calcTrajectory(): number[][] {
         this.trajectory = [];
         for (let clock = 1; clock <= 400; clock++) {
-            console.log(this.name);
             const loc = this.propagate(clock);
             this.trajectory.push(loc.map((v) => v * 100));
         }
