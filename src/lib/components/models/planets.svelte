@@ -113,7 +113,7 @@ Title: Solar System
     {#if planeta.planet != 'AnilloSaturno'}
     <T.SphereGeometry args={[0.5, 16, 16]} />
     {:else}
-    <T.RingGeometry args={[0.65, 1.1,32]} />
+    <T.RingGeometry args={[0.7, 1.1,32]} />
     {/if}
     {#await planeta.texture then texture}
     <T.MeshStandardMaterial map={texture} />  
