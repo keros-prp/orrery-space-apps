@@ -12,6 +12,7 @@
   <OrbitControls
     autoRotate
     enableZoom={true}
+    maxDistance={1500}
     enableDamping
     autoRotateSpeed={0.0}
     target.y={1.5}
