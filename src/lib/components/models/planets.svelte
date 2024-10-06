@@ -9,14 +9,14 @@ Title: Solar System
 
 <script lang="ts">
   import { T, useTask } from '@threlte/core'
-  import { OrbitControls, MeshLineGeometry, MeshLineMaterial, FakeGlowMaterial } from '@threlte/extras'
-  import {CuerpoCeleste} from '../../propagate-kepler'
+  import { MeshLineGeometry, MeshLineMaterial, FakeGlowMaterial, Outlines } from '@threlte/extras'
+  import { CuerpoCeleste } from '../../propagate-kepler'
   import { Vector3 } from 'three'
   import { TextureLoader } from 'three'
   import { useLoader } from '@threlte/core'
   import type { AsyncWritable } from '@threlte/core';    
   import { Texture } from 'three';
-  import { globalSunPos } from '../../stores'
+  import { globalSunPos, simSpeed } from '../../stores'
 
   const textureSun = useLoader(TextureLoader).load('/models/textures/lambert2_baseColor.jpeg')
   const textureMercury = useLoader(TextureLoader).load('/models/textures/lambert3_baseColor.jpeg')
@@ -70,6 +70,13 @@ Title: Solar System
 
   let planetPositions: { planet: string; pos: Vector3;texture:AsyncWritable<Texture>  }[] = [];
 
+  let simSpeedVal: number = 60;
+
+  simSpeed.subscribe((value: number) => {
+		simSpeedVal = value;
+        console.log(simSpeedVal);
+  });  
+
   let cont = 0;
   const { start, stop, started, task } = useTask((delta) => {
     planetPositions = [];
@@ -77,7 +84,7 @@ Title: Solar System
       const pos = planeta.propagateOnTime(cont);
       planetPositions!.push({planet: planeta.name, pos: new Vector3(pos[0], pos[1], pos[2]), texture:planeta.texture});
     }
-    cont += delta;
+    cont += delta * simSpeedVal / 365.25;
   })
 
   const sunPosArr: number[] = planetas[planetas.length -2].getSunPos();
@@ -91,15 +98,14 @@ Title: Solar System
 
 {#each planetPoints as points}
 <T.Mesh>
-  <FakeGlowMaterial glowColor="red"/>
   <MeshLineGeometry {points} />
   <MeshLineMaterial
     width={0.125}
     color="#aaaaaa"
   />
-
 </T.Mesh>
 {/each}
+
 <T.Mesh position={[sunPos.x, sunPos.y, sunPos.z]}>
   <T.SphereGeometry args={[1, 32, 32]} />
   <T.MeshBasicMaterial color="yellow" />
@@ -118,5 +124,7 @@ Title: Solar System
     {#await planeta.texture then texture}
       <T.MeshStandardMaterial map={texture} />  
     {/await}  
+    <!-- <Outlines color="white" thickness={1} screenspace={false} opacity={0.2} /> -->
+    <Outlines color="white" thickness={0.25} screenspace={false} opacity={0.2} />
   </T.Mesh>
 {/each}

@@ -85,7 +85,7 @@ export class CuerpoCeleste {
 
     propagateOnTime(clock: number) {
         const n = 2*Math.PI/this.relPeriod;
-        const M = n * (clock / 10);
+        const M = n * (clock);
         this.position = this.propagate(M).map((v: number) => v * 10);
         return this.position;
     }
