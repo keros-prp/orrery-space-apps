@@ -1,10 +1,37 @@
-<script lang="ts">
-  //import { T } from '@threlte/core'
-  //import { ContactShadows, Float, Grid, OrbitControls } from '@threlte/extras'
-  import Camera from './Camera.svelte'
-  import Planets from './models/planets.svelte'
+<script>
+  import { T, useTask } from '@threlte/core'
+  import { interactivity } from '@threlte/extras'
+  import { spring } from 'svelte/motion'
+  import { TextureLoader } from 'three'
+  import { useLoader } from '@threlte/core'
 
+
+  interactivity()
+  const scale = spring(1)
+  let rotation = 0
+  useTask((delta) => {
+    rotation += delta
+  })
+  const texture = useLoader(TextureLoader).load('/models/textures/lambert2_baseColor.jpeg')
 </script>
 
-<Camera />
-<Planets />
+<T.PerspectiveCamera
+  makeDefault
+  position={[10, 10, 10]}
+  on:create={({ ref }) => {
+    ref.lookAt(0, 1, 0)
+  }}
+/>
+
+<T.DirectionalLight position={[0, 10, 10]} />
+
+<T.Mesh
+
+
+>
+  <T.SphereGeometry args={[10, 32, 32]} />
+  {#if $texture}
+  <T.MeshStandardMaterial map={$texture} />
+{/if}
+</T.Mesh>
+
