@@ -1,3 +1,13 @@
+<script lang="ts">
+  import Camera from './Camera.svelte'
+  import Planets from './models/planets.svelte'
+
+</script>
+
+<Camera />
+<Planets />
+<!--
+
 <script>
   import { T, useTask } from '@threlte/core'
   import { interactivity } from '@threlte/extras'
@@ -34,4 +44,6 @@
   <T.MeshStandardMaterial map={$texture} />
 {/if}
 </T.Mesh>
+
+-->
 
