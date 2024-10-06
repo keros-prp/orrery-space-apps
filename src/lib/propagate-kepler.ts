@@ -1,73 +1,139 @@
 export class CuerpoCeleste {
     name: string = '';
+
     T: number = 0;
     a: number = 0;
+    a0: number = 0;
+    ap: number = 0;
     e: number = 0;
+    e0: number = 0;
+    ep: number = 0;
     I: number = 0;
+    I0: number = 0;
+    Ip: number = 0;
     L: number = 0;
-    w: number = 0;
-    W: number = 0;
+    L0: number = 0;
+    Lp: number = 0;
+    peri: number = 0;
+    peri0: number = 0;
+    perip: number = 0;
+    an: number = 0;
+    an0: number = 0;
+    anp: number = 0;
+    omega: number = 0;
+    omega0: number = 0;
+    omegap: number = 0;
+    b: number = 0;
+    c: number = 0;
+    s: number = 0;
+    f: number = 0;
+    relPeriod: number = 1;
+    public position: number[] = [];
     trajectory: number[][] = [];
-    constructor(name: string, a0: number, ap: number, e0: number, ep: number, I0: number, Ip: number, L0: number, Lp: number, w0: number, wp:number, W0: number, Wp: number) {
-        I0 = Math.PI * L0 / 180;
-        Ip = Math.PI * Lp / 180;
-        L0 = Math.PI * L0 / 180;
-        Lp = Math.PI * Lp / 180;
-        w0 = Math.PI * w0 / 180;
-        wp = Math.PI * wp / 180;
-        W0 = Math.PI * W0 / 180;
-        Wp = Math.PI * Wp / 180;
+
+    constructor(name: string, a0: number, ap: number, e0: number, ep: number, I0: number, Ip: number, L0: number, Lp: number, peri0: number, perip:number, an0: number, anp: number, relPeriod: number) {
+        this.a0 = a0;
+        this.ap = ap;
+        this.e0 = e0;
+        this.ep = ep;
+
+        this.I0 = Math.PI * I0 / 180;
+        this.Ip = Math.PI * Ip / 180;
+        this.L0 = Math.PI * L0 / 180;
+        this.Lp = Math.PI * Lp / 180;
+        this.peri0 = Math.PI * peri0 / 180;
+        this.perip = Math.PI * perip / 180;
+        this.an0 = Math.PI * an0 / 180;
+        this.anp = Math.PI * anp / 180;
+
+        this.relPeriod = relPeriod;
+
         this.name = name;
-        this.T = (normalDateToJD(new Date()) - 2451545) / 36525;
-        this.a = a0 + this.T * ap;
-        this.e = e0 + this.T * ep;
-        this.I = I0 + this.T * Ip;
-        this.L = L0 + this.T * Lp;
-        this.w = w0 + this.T * wp;
-        this.W = W0 * this.T * Wp;
+        this.setT((CuerpoCeleste.normalDateToJD(new Date()) - 2451545) / 36525);
     }
 
-    propagate(clock: number) {
-        const period = 365.25
-        const n = 2*Math.PI/period
-        const tau = 0
+    public setT(T: number) {
+        this.T = T;
+        this.updateParametersBasedOnTime();
+    }
+
+    updateParametersBasedOnTime() {
+        this.a = this.a0 + this.T * this.ap;
+        this.e = this.e0 + this.T * this.ep;
+        this.I = this.I0 + this.T * this.Ip;
+        this.L = this.L0 + this.T * this.Lp;
+        this.peri = this.peri0 + this.T * this.perip;
+        this.an = this.an0 * this.T * this.anp;
+
+        this.omega = this.peri - this.an;
+    }
+
+    propagateOnClock(clock: number) {
+        const period = 64;
+        const n = 2*Math.PI/period;
+        const tau = 0;
 
         const M = n * (clock - tau)
-        const E = KeplerSolve(this.e,M)
+
+        return this.propagate(M);
+    }
+
+    propagateOnTime(clock: number) {
+        const n = 2*Math.PI/this.relPeriod;
+        const M = n * (clock / 10);
+        this.position = this.propagate(M).map((v: number) => v * 100);
+        return this.position;
+    }
+    propagate(M: number) {
+        const E = KeplerSolve(this.e,M);
 
         const x = this.a * (cos(E) - this.e);
         const y = this.a * Math.sqrt(1 - this.e**2) * sin(E);
 
-        // const cos_w = cos(this.w);
-        // const sin_w = sin(this.w);
-        //
-        // const cos_W = cos(this.W);
-        // const sin_W = sin(this.W);
-        //
-        // const cos_I = cos(this.I);
-        // const sin_I = sin(this.I);
+        const cos_w = cos(this.omega);
+        const sin_w = sin(this.omega);
 
-        // const xecl = (cos_w*cos_W - sin_w*sin_W*cos_I) * x +
-        //     (-sin_w*cos_W - sin_w*sin_W*cos_I) * y;
-        // const yecl = (cos_w*sin_W + sin_w*cos_W*cos_I) * x +
-        //     (-sin_w*sin_W + cos_w*cos_W*cos_I) * y;
-        // const zecl = (sin_w*sin_I) * x + (cos_w*sin_I) * y;
+        const cos_W = cos(this.an);
+        const sin_W = sin(this.an);
 
-        return [x, y, 0];
-        // return [xecl, yecl, zecl];
+        const cos_I = cos(this.I);
+        const sin_I = sin(this.I);
+
+        const xecl = (cos_w*cos_W - sin_w*sin_W*cos_I) * x +
+            (-sin_w*cos_W - sin_w*sin_W*cos_I) * y;
+        const yecl = (cos_w*sin_W + sin_w*cos_W*cos_I) * x +
+            (-sin_w*sin_W + cos_w*cos_W*cos_I) * y;
+        const zecl = (sin_w*sin_I) * x + (cos_w*sin_I) * y;
+
+        return [xecl, yecl, zecl];
     }
 
     public calcTrajectory(): number[][] {
         this.trajectory = [];
-        for (let clock = 1; clock <= 400; clock++) {
-            const loc = this.propagate(clock);
-            this.trajectory.push(loc.map((v) => v * 100));
+        for (let clock = 1; clock <= 65; clock++) {
+            const loc = this.propagateOnClock(clock);
+            this.trajectory.push(loc.map((v: number) => v * 100));
         }
         return this.trajectory;
+
     }
 
     public getTrajectory(): number[][] {
         return this.trajectory;
+    }
+
+    public getPosition(): number[] {
+        return this.position;
+    }
+
+    static normalDateToJD(date: Date): number {
+        const epochTime = new Date('1970-01-01T00:00:00.000Z');
+        const millisecondsPerDay = 86400000;
+        const julianEpoch = 2440587.5;
+        const dateMilliseconds = date.getTime();
+        const dateRelativeToEpoch = dateMilliseconds - epochTime.getTime();
+        const jd = (dateRelativeToEpoch / millisecondsPerDay) + julianEpoch;
+        return jd;
     }
 }
 
@@ -93,16 +159,6 @@ function eps3(e: number, M: number, x: number): number {
     return t5/((1/2 * t3 - 1/6 * t1 * t6) * e * t6 + t2);
 }
 
-function normalDateToJD(date: Date): number {
-    const epochTime = new Date('1970-01-01T00:00:00.000Z');
-    const millisecondsPerDay = 86400000;
-    const julianEpoch = 2440587.5;
-    const dateMilliseconds = date.getTime();
-    const dateRelativeToEpoch = dateMilliseconds - epochTime.getTime();
-    const jd = (dateRelativeToEpoch / millisecondsPerDay) + julianEpoch;
-    return jd;
-}
-
 function KeplerSolve(e: number, M: number): number {
     const tol = 1.0e-3;
     const Mnorm = M % (2 * Math.PI) - Math.PI;
@@ -117,7 +173,7 @@ function KeplerSolve(e: number, M: number): number {
         E0 = E;
         count++;
 
-        if (count == 32) {
+        if (count == 8) {
             console.error("Ya valió madres");
             break
         }
