@@ -9,6 +9,7 @@ export type Info = {
   duracion: string | undefined;
   satelites: number | undefined;
   name: string | undefined;
+  image: string | undefined;
 };
 
 export const info = writable<Info>({
@@ -19,5 +20,6 @@ export const info = writable<Info>({
   tiempo: "",
   duracion: "",
   satelites: 1,
-  name: ""
+  name: "",
+  image: ""
 });

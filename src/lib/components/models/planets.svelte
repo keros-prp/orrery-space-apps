@@ -45,6 +45,7 @@ Title: Solar System
       duracion: '58.6 hours',
       satelites: 0,
       name: 'Named after the Roman messenger god, Mercury, who was associated with speed and communication.',
+      image: '/assets/Mercury.png'
     },
     {
       nombre: "Venus",
@@ -55,6 +56,7 @@ Title: Solar System
       duracion: '243 hours',
       satelites: 0,
       name: 'Named after the Roman goddess of love and beauty, Venus.',
+      image: '/assets/Venus.jpg'
     },
     {
     	nombre: "Earth",
@@ -65,6 +67,7 @@ Title: Solar System
       duracion: '24 hours',
       satelites: 1,
       name: 'The name "Earth" comes from Old English "eorðe" and the Anglo-Saxon word "erda," meaning ground or soil. The name reflects the planet\'s nature as the ground we stand on.',
+      image: '/assets/Earth.jpg'
     },
     {
     	nombre: "Mars",
@@ -75,6 +78,7 @@ Title: Solar System
       duracion: '24.6 hours',
       satelites: 2,
       name: 'Named after the Roman god of war, Mars. The planet\'s reddish color led to its association with blood and warfare',
+      image: '/assets/Mars.jpg'
     },
     {
       nombre: "Jupiter",
@@ -85,6 +89,7 @@ Title: Solar System
       duracion: '9.9 hours',
       satelites: 95,
       name: 'Named after the king of the Roman gods, Jupiter, who was associated with thunder and the sky.',
+      image: '/assets/Jupiter.png'
     },
     {
       nombre: "Saturn",
@@ -95,6 +100,7 @@ Title: Solar System
       duracion: '10.7 hours',
       satelites: 146,
       name: 'Named after the Roman god of time, Saturn, who was also associated with wealth and abundance.',
+      image: '/assets/Saturn.jpg'
     },
     {
     	nombre: "Uranus",
@@ -105,6 +111,7 @@ Title: Solar System
       duracion: '17.2 hours',
       satelites: 28,
       name: 'Named after the Greek god Uranus, the personification of the sky. The name was suggested by astronomer Johann Bode.',
+      image: '/assets/Uranus.png'
     },
     {
     	nombre: "Neptune",
@@ -115,6 +122,7 @@ Title: Solar System
       duracion: '16.1 hours',
       satelites: 16,
       name: 'Named after the Roman messenger god, Mercury, who was associated with speed and communication.Named after the Roman god of the sea, Neptune. The name reflects the planet\'s deep blue color.',
+      image: '/assets/Neptune.jpg'
     },
     {
     	nombre: "Pluto",
@@ -125,13 +133,14 @@ Title: Solar System
       duracion: '153.3 hours',
       satelites: 5,
       name: 'Named after the Roman god of the underworld, Pluto. The name reflects the cold and distant nature of the dwarf planet.',
+      image: '/assets/Pluto.jpg'
     }
   ];
 
   const handlePlanetClick = (planeta: { planet: string; pos: Vector3  }) => {
     let datosPlaneta = datos.find(element => element.nombre === planeta.planet);
     info.update(() => {
-        return { nombre: datosPlaneta?.nombre, vision: true, tamaño: datosPlaneta?.tamaño, distancia: datosPlaneta?.distancia, tiempo: datosPlaneta?.tiempo, duracion: datosPlaneta?.duracion, satelites: datosPlaneta?.satelites, name: datosPlaneta?.name }
+        return { nombre: datosPlaneta?.nombre, vision: true, tamaño: datosPlaneta?.tamaño, distancia: datosPlaneta?.distancia, tiempo: datosPlaneta?.tiempo, duracion: datosPlaneta?.duracion, satelites: datosPlaneta?.satelites, name: datosPlaneta?.name, image: datosPlaneta?.image }
     })
   };
 
