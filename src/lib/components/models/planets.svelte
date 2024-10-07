@@ -27,7 +27,7 @@
   const handlePlanetClick = (planeta: { name: string; pos: Vector3  }) => {
     let datosPlaneta = datos.find(element => element.nombre === planeta.name);
     info.update(() => {
-        return { nombre: datosPlaneta?.nombre, vision: true, tamaño: datosPlaneta?.tamaño, distancia: datosPlaneta?.distancia, tiempo: datosPlaneta?.tiempo, duracion: datosPlaneta?.duracion, satelites: datosPlaneta?.satelites, name: datosPlaneta?.name }
+        return { nombre: datosPlaneta?.nombre, vision: true, tamaño: datosPlaneta?.tamaño, distancia: datosPlaneta?.distancia, tiempo: datosPlaneta?.tiempo, duracion: datosPlaneta?.duracion, satelites: datosPlaneta?.satelites, name: datosPlaneta?.name, image: datosPlaneta?.image }
     })
   };
 
