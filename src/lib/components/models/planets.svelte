@@ -21,7 +21,6 @@ Title: Solar System
   import { interactivity } from '@threlte/extras'
   interactivity()
 
-  // const textureSun = useLoader(TextureLoader).load('/models/textures/lambert2_baseColor.jpeg')
   const textureMercury = useLoader(TextureLoader).load('/models/textures/lambert3_baseColor.jpeg')
   const textureVenus = useLoader(TextureLoader).load('/models/textures/lambert4_baseColor.jpeg')
   const textureEarth = useLoader(TextureLoader).load('/models/textures/lambert5_baseColor.jpeg')
