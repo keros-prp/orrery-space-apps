@@ -6,7 +6,6 @@
 
   info.subscribe((value) => {
     infoPlanet = value;
-    console.log(infoPlanet.vision)
   });
 
   const closeModal = () => {

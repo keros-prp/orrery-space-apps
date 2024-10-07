@@ -1,27 +1,27 @@
 <script lang="ts">
   import { Canvas } from '@threlte/core'
   import Scene from './Scene.svelte'
-  import { Pane, Slider } from 'svelte-tweakpane-ui';
-  import { simSpeed } from '../stores'
+  import { Pane, Slider, Button } from 'svelte-tweakpane-ui';
+  import { currTarget, simSpeed, planetPositions, type PlanetPosition } from '../stores'
   import Modal from './modal.svelte'
 
-  let simSpeedVal:number = 0;
-
-  simSpeed.subscribe((value: number) => {
-		simSpeedVal = value;
-  });  
-
-  $: simSpeed.update(()=>simSpeedVal);
+  function handleButtonClick(buttonData: PlanetPosition) {
+    $simSpeed = 0;
+    $currTarget = buttonData.pos;
+  }
 
 </script>
 
-<Pane>
+<Pane title="Simulation controls" >
   <Slider
-    bind:value={simSpeedVal}
+    bind:value={$simSpeed}
     min={0}
     max={365.25}
     label="Sim. speed (days/second)"
   />
+  {#each $planetPositions as element}
+      <Button on:click={() => handleButtonClick(element)} title='Go to {element.name}' />
+  {/each}
 </Pane>
 
 
