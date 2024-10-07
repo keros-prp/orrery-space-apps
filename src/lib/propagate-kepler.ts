@@ -75,7 +75,7 @@ export class CuerpoCeleste {
     }
 
     propagateOnClock(clock: number) {
-        const period = 128;
+        const period = 64;
         const n = 2*Math.PI/period;
         const tau = 0;
 
@@ -127,7 +127,7 @@ export class CuerpoCeleste {
 
     public calcTrajectory(): number[][] {
         this.trajectory = [];
-        for (let clock = 1; clock <= 129; clock++) {
+        for (let clock = 1; clock <= 65; clock++) {
             const loc = this.propagateOnClock(clock);
             this.trajectory.push(loc.map((v: number) => v * 25));
         }
