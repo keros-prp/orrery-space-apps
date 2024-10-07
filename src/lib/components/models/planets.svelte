@@ -16,7 +16,7 @@ Title: Solar System
   import { useLoader } from '@threlte/core'
   import type { AsyncWritable } from '@threlte/core';    
   import { Texture } from 'three';
-  import { globalSunPos, simSpeed } from '../../stores'
+  import { globalSunPos, simSpeed, planetPositions, type PlanetPosition } from '../../stores'
   import { info, type Info } from '../store';
   import { interactivity } from '@threlte/extras'
   interactivity()
@@ -168,13 +168,6 @@ Title: Solar System
 
   let planetMetaInfo: { name: string; pos: Vector3; texture:AsyncWritable<Texture>}[] = [];
 
-  let simSpeedVal: number = 60;
-
-  simSpeed.subscribe((value: number) => {
-		simSpeedVal = value;
-        console.log(simSpeedVal);
-  });  
-  
   let saturnPos: Vector3 = new Vector3();
 
   let cont = 0;
@@ -187,7 +180,16 @@ Title: Solar System
          saturnPos = new Vector3(pos[0], pos[1], pos[2]);
       }
     }
-    cont += delta * simSpeedVal / 365.25;
+    cont += delta * $simSpeed / 365.25;
+    let positionArr: PlanetPosition[] = [];
+    for (const meta of planetMetaInfo) {
+    positionArr.push({
+      name: meta.name,
+      pos: meta.pos,
+    });
+    }
+    planetPositions.set(positionArr);
+
   })
 
   const sunPosArr: number[] = planetas[planetas.length -2].getSunPos();
@@ -217,7 +219,7 @@ Title: Solar System
 </T.Mesh>
 {#each planetMetaInfo as planeta}
     <T.Mesh position.x={planeta.pos.x} position.y={planeta.pos.y} position.z={planeta.pos.z} interactive on:click={() => handlePlanetClick({name: planeta.name, pos: planeta.pos})}>
-    <T.SphereGeometry args={[0.5, 16, 16]} />
+    <T.SphereGeometry args={[0.5, 32, 32]} />
     {#await planeta.texture then texture}
       <T.MeshStandardMaterial map={texture} />  
     {/await}  

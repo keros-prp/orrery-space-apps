@@ -5,9 +5,7 @@
   let infoPlanet: Info;
 
   info.subscribe((value) => {
-    //console.log(value)
     infoPlanet = value;
-    console.log(infoPlanet.vision)
   });
 
 </script>

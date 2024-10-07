@@ -9,3 +9,4 @@ export type PlanetPosition = {
 export const globalSunPos = writable(new Vector3(0, 0, 0));
 export const simSpeed = writable(5);
 export const planetPositions = writable<PlanetPosition[]>([]);
+export const currTarget = writable<Vector3>(new Vector3(0, 0, 0));
