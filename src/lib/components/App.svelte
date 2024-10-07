@@ -12,7 +12,7 @@
 
 </script>
 
-<Pane>
+<Pane title="Simulation controls" >
   <Slider
     bind:value={$simSpeed}
     min={0}
