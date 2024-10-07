@@ -32,16 +32,16 @@ export class CuerpoCeleste {
     relPeriod: number = 1;
     public position: number[] = [];
     trajectory: number[][] = [];
-    texture: AsyncWritable<Texture>
-
+    texture: AsyncWritable<Texture>;
+    relative_size: number=1
     static sunPos: number[] = [];
 
-    constructor(name: string, a0: number, ap: number, e0: number, ep: number, I0: number, Ip: number, L0: number, Lp: number, peri0: number, perip:number, an0: number, anp: number, relPeriod: number, texture: AsyncWritable<Texture>) {
+    constructor(name: string, a0: number, ap: number, e0: number, ep: number, I0: number, Ip: number, L0: number, Lp: number, peri0: number, perip:number, an0: number, anp: number, relPeriod: number, texture: AsyncWritable<Texture>, relative_size:number) {
         this.a0 = a0;
         this.ap = ap;
         this.e0 = e0;
         this.ep = ep;
-        this.texture = texture
+        this.texture = texture;
         this.I0 = Math.PI * I0 / 180;
         this.Ip = Math.PI * Ip / 180;
         this.L0 = Math.PI * L0 / 180;
@@ -50,6 +50,7 @@ export class CuerpoCeleste {
         this.perip = Math.PI * perip / 180;
         this.an0 = Math.PI * an0 / 180;
         this.anp = Math.PI * anp / 180;
+        this.relative_size = relative_size;
 
         this.relPeriod = relPeriod;
 
@@ -85,8 +86,8 @@ export class CuerpoCeleste {
 
     propagateOnTime(clock: number) {
         const n = 2*Math.PI/this.relPeriod;
-        const M = n * (clock / 10);
-        this.position = this.propagate(M).map((v: number) => v * 10);
+        const M = n * (clock);
+        this.position = this.propagate(M).map((v: number) => v * 25);
         return this.position;
     }
 
@@ -128,7 +129,7 @@ export class CuerpoCeleste {
         this.trajectory = [];
         for (let clock = 1; clock <= 129; clock++) {
             const loc = this.propagateOnClock(clock);
-            this.trajectory.push(loc.map((v: number) => v * 10));
+            this.trajectory.push(loc.map((v: number) => v * 25));
         }
         return this.trajectory;
 
