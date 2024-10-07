@@ -30,5 +30,27 @@
   <Scene />
 </Canvas>
 
+<div>
+  <a href="https://github.com/keros-prp/orrery-space-apps">
+    <img src="/icons/github-mark/github-mark-white.svg" alt="Credits and repo">
+  </a>
+</div>
+
 <style>
+  div {
+    font-family: sans-serif;
+    background: rgba(255, 255, 255, 0.1); /* Fondo blanco con transparencia */
+    opacity: 80%;
+    position: absolute;
+    bottom: 0%;
+    left: 0%;
+    color: azure;
+    border-radius: 1em; /* Bordes redondeados */
+    padding: 1em; /* Espaciado interno */
+    margin: 1em;
+  }
+
+  img {
+    height: 2em;
+  }
 </style>

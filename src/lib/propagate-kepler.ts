@@ -1,3 +1,7 @@
+/*
+ * Orbit simulator adapted from https://nasa.github.io/mission-viz/RMarkdown/Elliptical_Orbit_Design.html
+ * Which was originally made by Daniel A. O’Neil.
+ */
 import type { AsyncWritable } from '@threlte/core';    
 import { Texture } from 'three';    
 export class CuerpoCeleste {
